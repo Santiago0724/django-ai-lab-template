@@ -1,0 +1,16 @@
+{% extends "ucc/base.html" %}
+
+{% block title %}Programas{% endblock %}
+
+{% block content %}
+  <h1>Programas</h1>
+  <ul class="list-group">
+    {% for p in programas %}
+      <li class="list-group-item">
+        <a href="{% url 'programa-detail' p.pk %}">{{ p.nombre }}</a>
+      </li>
+    {% empty %}
+      <li class="list-group-item">No hay programas registrados.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

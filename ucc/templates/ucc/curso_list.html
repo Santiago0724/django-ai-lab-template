@@ -1,0 +1,23 @@
+{% extends "ucc/base.html" %}
+
+{% block title %}Cursos{% endblock %}
+
+{% block content %}
+  <h1 class="mb-3">Listado de Cursos</h1>
+  <ul class="list-group">
+    {% for c in cursos %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>
+          <a href="{% url 'curso-detail' c.pk %}">
+            {{ c.codigo }} - {{ c.nombre }}
+          </a>
+          <br>
+          <small class="text-muted">Programa: {{ c.programa.nombre }}</small>
+        </span>
+        <span class="badge bg-secondary">{{ c.creditos }} créditos</span>
+      </li>
+    {% empty %}
+      <li class="list-group-item">No hay cursos registrados.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

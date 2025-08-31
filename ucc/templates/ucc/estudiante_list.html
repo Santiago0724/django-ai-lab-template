@@ -1,0 +1,20 @@
+{% extends "ucc/base.html" %}
+
+{% block title %}Estudiantes{% endblock %}
+
+{% block content %}
+  <h1 class="mb-3">Listado de Estudiantes</h1>
+  <ul class="list-group">
+    {% for e in estudiantes %}
+      <li class="list-group-item">
+        <a href="{% url 'estudiante-detail' e.pk %}">
+          {{ e.codigo }} - {{ e.nombre }}
+        </a>
+        <br>
+        <small class="text-muted">{{ e.email }}</small>
+      </li>
+    {% empty %}
+      <li class="list-group-item">No hay estudiantes registrados.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

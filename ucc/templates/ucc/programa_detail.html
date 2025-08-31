@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ programa.nombre }}{% endblock %}
+{% block content %}
+<h1>{{ programa.nombre }}</h1>
+<p>{{ programa.descripcion|default:"(Sin descripción)" }}</p>
+
+<h3 class="mt-4">Cursos del programa</h3>
+<ul class="list-group">
+  {% for c in programa.cursos.all %}
+    <li class="list-group-item">
+      <a href="{% url 'curso-detail' c.pk %}">{{ c.codigo }} - {{ c.nombre }}</a>
+    </li>
+  {% empty %}
+    <li class="list-group-item">No hay cursos en este programa.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ curso.codigo }} - {{ curso.nombre }}{% endblock %}
+{% block content %}
+<h1>{{ curso.codigo }} - {{ curso.nombre }}</h1>
+<p><strong>Programa:</strong> <a href="{% url 'programa-detail' curso.programa.pk %}">{{ curso.programa.nombre }}</a></p>
+<p><strong>Créditos:</strong> {{ curso.creditos }}</p>
+
+<h3 class="mt-4">Estudiantes inscritos</h3>
+<ul class="list-group">
+  {% for e in curso.estudiantes.all %}
+    <li class="list-group-item">
+      <a href="{% url 'estudiante-detail' e.pk %}">{{ e.codigo }} - {{ e.nombre }}</a>
+    </li>
+  {% empty %}
+    <li class="list-group-item">Aún no hay estudiantes inscritos.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

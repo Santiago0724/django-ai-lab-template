@@ -1,36 +1,43 @@
 from django.db import models
 
-
 class Programa(models.Model):
-    nombre = models.CharField(max_length=100)
-    codigo = models.CharField(max_length=10, unique=True)
-    facultad = models.CharField(max_length=100)
-    duracion_anios = models.PositiveIntegerField(default=5)
+    nombre = models.CharField(max_length=120, unique=True)
+    descripcion = models.TextField(blank=True)
 
     def __str__(self):
         return self.nombre
 
+
 class Curso(models.Model):
-    nombre = models.CharField(max_length=100) 
-    codigo = models.CharField(max_length=20, unique=True)
-    semestre = models.PositiveIntegerField()
-    programa = models.ForeignKey(
-        Programa, on_delete=models.CASCADE, related_name='cursos')
+    programa = models.ForeignKey(Programa, on_delete=models.CASCADE, related_name='cursos')
+    codigo = models.CharField(max_length=10, unique=True)
+    nombre = models.CharField(max_length=120)
+    creditos = models.PositiveSmallIntegerField(default=3)
 
     def __str__(self):
-        return f"{self.nombre} ({self.codigo})"
-        
+        return f"{self.codigo} - {self.nombre}"
+
 
 class Estudiante(models.Model):
-    nombre = models.CharField(max_length=100)
-    correo = models.EmailField(unique=True)
-    codigo_estudiante = models.CharField(max_length=20, unique=True)
-    fecha_ingreso = models.DateField()
-    programa = models.ForeignKey(Programa, on_delete=models.SET_NULL, null=True)
-    cursos = models.ManyToManyField(Curso, related_name='estudiantes', blank=True)
+    codigo = models.CharField(max_length=12, unique=True, default="0000") 
+    nombre = models.CharField(max_length=120)
+    email = models.EmailField(unique=True)
+    # Relación muchos a muchos vía tabla intermedia Inscripcion
+    cursos = models.ManyToManyField('Curso', through='Inscripcion', related_name='estudiantes')
 
     def __str__(self):
-        return f"{self.nombre} ({self.codigo_estudiante})"
+        return f"{self.codigo} - {self.nombre}"
 
 
-# Create your models here.
+class Inscripcion(models.Model):
+    estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, related_name='inscripciones')
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name='inscripciones')
+    fecha = models.DateField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['estudiante', 'curso'], name='unique_inscripcion')
+        ]
+
+    def __str__(self):
+        return f"{self.estudiante} → {self.curso}"

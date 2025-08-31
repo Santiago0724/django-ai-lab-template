@@ -1,0 +1,11 @@
+{% extends "ucc/base.html" %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+  <div class="text-center">
+    <h1 class="mb-4">Bienvenido a la Universidad UCC</h1>
+    <p class="lead">Sistema académico de programas, cursos y estudiantes.</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'programa-list' %}">Ver Programas</a>
+  </div>
+{% endblock %}
