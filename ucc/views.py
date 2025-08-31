@@ -42,17 +42,12 @@ def lista_estudiantes(request):
 
 def detalle_estudiante(request, pk):
     estudiante = get_object_or_404(Estudiante, pk=pk)
-    # cursos del estudiante (M2M via Inscripcion)
-    cursos = (
-        estudiante.cursos
-        .select_related("programa")
-        .all()
-        .order_by("codigo")
-    )
+    cursos = estudiante.cursos.select_related("programa").all().order_by("codigo")
+    cursos_disponibles = Curso.objects.exclude(pk__in=cursos.values_list("pk", flat=True))
     return render(
         request,
         "ucc/estudiante_detail.html",
-        {"estudiante": estudiante, "cursos": cursos}
+        {"estudiante": estudiante, "cursos": cursos, "cursos_disponibles": cursos_disponibles}
     )
 
 # --- Acción de inscribir (opcional, mismo estilo funcional) ---
